@@ -1,6 +1,5 @@
 import React from 'react'
 import api from '../api'
-import logo from '../logo.svg'
 import { Link, NavLink } from 'react-router-dom'
 import { withRouter } from 'react-router'
 
@@ -9,14 +8,13 @@ function MainNavbar(props) {
     api.logout()
   }
   return (
-    <nav className="App-header">
-      <img src={logo} className="App-logo" alt="logo" />
-      <h1 className="App-title">MERN Boilerplate</h1>
-      <NavLink to="/" exact>
-        Home
+    <nav className="App-header navbar navbar-expand-lg bg-danger">
+      <NavLink className="navbar-brand" to="/" exact>
+        MERN STREET ART
       </NavLink>
-      <NavLink to="/countries">Countries</NavLink>
-      <NavLink to="/add-country">Add country</NavLink>
+      <NavLink to="/list">List</NavLink>
+      <NavLink to="/map">Map</NavLink>
+      <NavLink to="/new-streetart">New Street Art</NavLink>
       {!api.isLoggedIn() && <NavLink to="/signup">Signup</NavLink>}
       {!api.isLoggedIn() && <NavLink to="/login">Login</NavLink>}
       {api.isLoggedIn() && (
@@ -24,7 +22,6 @@ function MainNavbar(props) {
           Logout
         </Link>
       )}
-      <NavLink to="/secret">Secret</NavLink>
     </nav>
   )
 }
