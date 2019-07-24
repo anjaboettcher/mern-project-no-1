@@ -98,3 +98,7 @@ body {
     color: $primary;
   }
 }
+
+.hoverTable tr:hover {
+  background-color: #ECECEC;
+}

@@ -11,11 +11,12 @@ router.get('/', (req, res, next) => {
     .catch(err => next(err))
 })
 
-router.get('/:id', (req, res, next) => {
-  let streetArtID = req.params.id
+router.get(`/:streetArtId`, (req, res, next) => {
+  console.log('TESTTEST')
+  let streetArtID = req.params.streetArtId
   StreetArt.findById(streetArtID)
-    .then(StreetArts => {
-      res.json(StreetArts)
+    .then(StreetArt => {
+      res.json(StreetArt)
     })
     .catch(err => next(err))
 })

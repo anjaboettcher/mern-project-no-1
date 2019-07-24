@@ -8,7 +8,7 @@ const router = express.Router()
 router.get('/my-visits', isLoggedIn, (req, res, next) => {
   Visit.find({ _user: req.user._id })
     .populate('_streetArt')
-    .populate('_user')
+    // .populate('_user')
     .then(visit => {
       res.json(visit)
     })
@@ -16,22 +16,39 @@ router.get('/my-visits', isLoggedIn, (req, res, next) => {
 })
 
 router.post('/visits', isLoggedIn, (req, res, next) => {
-  let _user = req.user._id
   let { _streetArt } = req.body
-  Visit.create({ _user, _streetArt })
-    .then(visit => {
-      res.json({
-        success: true,
-        visit,
+  let _user = req.user._id
+
+  Visit.find({ _user: req.user._id, StreetArt }).then(visit => {
+    if (visit) {
+      next({
+        status: 409,
+        message: 'You already have a visit here',
       })
-    })
-    .catch(err => next(err))
+    } else {
+      Visit.create({ _user, _streetArt })
+        .then(visit => {
+          res.json(visit)
+        })
+        .catch(err => next(err))
+    }
+  })
 })
 
 router.delete('/visits/:visitId', isLoggedIn, (req, res, next) => {
   let visitId = req.params.visitId
   Visit.findById(visitId).then(visit => {
-    if (String(visit._user) === String(req.user._id)) {
+    if (!visit) {
+      next({
+        status: 200,
+        message: 'There is no visit with the _id = ' + visitId,
+      })
+    } else if (String(visit._user) !== String(req.user._id)) {
+      next({
+        status: 403,
+        message: 'You are not the owner of the visit ',
+      })
+    } else if (String(visit._user) === String(req.user._id)) {
       Visit.findByIdAndDelete(visitId).then(visit => {
         res.json({ message: 'Your visit has been successfully erased!' })
       })

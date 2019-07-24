@@ -5,7 +5,7 @@ import { useForm } from '../../hooks'
 export default function Login(props) {
   const { handleChange, handleSubmit, values } = useForm(() => {
     api
-      .login(values.username, values.password)
+      .login(values.email, values.password)
       .then(result => {
         console.log('SUCCESS!')
         props.history.push('/') // Redirect to the home page
@@ -19,11 +19,11 @@ export default function Login(props) {
     <div className="Login">
       <h2>Login</h2>
       <form onSubmit={handleSubmit}>
-        Username:{' '}
+        Email:{' '}
         <input
           type="text"
-          value={values.username || ''}
-          name="username"
+          value={values.email || ''}
+          name="email"
           onChange={handleChange}
         />{' '}
         <br />
